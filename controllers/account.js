@@ -3,7 +3,9 @@ const bcrypt = require('bcrypt');
 //const sgmail = require('@sendgrid/mail');
 
 exports.getLogin = (req,res,next) => {
-    res.render('account/login')
+    res.render('account/login',{
+        title:"Login"
+    })
     next();
 }
 
@@ -37,7 +39,9 @@ exports.postLogin = (req,res,next) => {
 }
 
 exports.getRegister = (req,res,next) => {
-    res.render("account/register")
+    res.render("account/register",{
+        title:"Register"
+    })
     next();
 }
 

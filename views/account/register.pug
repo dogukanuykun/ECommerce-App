@@ -2,8 +2,12 @@ extends ../layouts/main-layout.pug
 
 block content 
 
-    form.register-form(action="/register" method="POST")
+    div
+        h2 Register
+        hr
 
+    form.register-form(action="/register" method="POST")
+        input(type="hidden" name="_csrf" value=`${csrfToken}`)
         .form-group 
             label(for="username") Username 
             input.form-control(type="text" placeholder="Enter Username")

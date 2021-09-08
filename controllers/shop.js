@@ -10,8 +10,7 @@ categoryService.getCategories().then(response => {categories = (response.data)})
 exports.getIndex = (req, res, next) => {
   res.render("shop/index.pug", {
     categories: categories,
-    products: products,
-    isAuthenticated: req.session.isAuthenticated
+    products: products
   });
 };
 
@@ -24,16 +23,14 @@ exports.getProduct = (req, res, next) => {
     product: selectedProduct,
     otherProducts: productsWithoutThis,
     title: selectedProduct.title,
-    path: "/products",
-    isAuthenticated: req.session.isAuthenticated
+    path: "/products"
   });
 };
 
 exports.getProducts = (req,res,next) => {
 
   res.render("shop/products",{
-    products:products,
-    isAuthenticated: req.session.isAuthenticated
+    products:products
   })
 }
 
@@ -45,8 +42,7 @@ exports.getByCategory = (req,res,next) => {
   res.render("shop/index",{
     products: productsByCategory,
     title: selectedCategory,
-    categories:categories,
-    isAuthenticated: req.session.isAuthenticated
+    categories:categories
   })
   next();
 }

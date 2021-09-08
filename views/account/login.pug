@@ -1,10 +1,17 @@
 extends ../layouts/main-layout.pug
 
 block content 
+    
+    div 
+        h2 Login
+        hr
+    
     if errorMessage
         div.alert.alert-danger.col-sm-7 #{errorMessage}
 
+
     form(action="/login" method="POST")
+        input(type="hidden" name="_csrf" value=`${csrfToken}`)
         .form-group
             label(for="email") Email address
             input.form-control(type="email" name="email" placeholder="Enter email")

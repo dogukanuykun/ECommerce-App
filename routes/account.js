@@ -3,12 +3,15 @@ const router = express.Router();
 
 const accountController = require('../controllers/account')
 
-router.get("/login",accountController.getLogin);
-router.post("/login",accountController.postLogin);
+const isAuthenticated = require('../middleware/authentication');
+const csrf = require('../middleware/csrf');
 
-router.get("/register",accountController.getRegister);
+router.get("/login",csrf, accountController.getLogin);
+router.post("/login", accountController.postLogin);
+
+router.get("/register", csrf, accountController.getRegister);
 router.post("/register",accountController.postRegister);
 
-router.get("/logout",accountController.getLogout)
+router.get("/logout",isAuthenticated,accountController.getLogout)
 
 module.exports=router
