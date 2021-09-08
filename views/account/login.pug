@@ -1,0 +1,22 @@
+extends ../layouts/main-layout.pug
+
+block content 
+    if errorMessage
+        div.alert.alert-danger.col-sm-7 #{errorMessage}
+
+    form(action="/login" method="POST")
+        .form-group
+            label(for="email") Email address
+            input.form-control(type="email" name="email" placeholder="Enter email")
+            small.form-text.text-muted(id="emailHelp") We'll never share your email with anyone else
+        
+        .form-group
+            label(for="password") Password
+            input.form-control(type="password" name="password" placeholder="Password")
+        .form-group.form-check
+            input.form-check-input(type="checkbox" id="exampleCheck1")
+            label.form-check-label(for="exampleCheck1") Check me out
+        button.btn.btn-primary(type="submit") Login
+        br
+        br  
+        a(href="/register") Don't have an account?
