@@ -3,8 +3,11 @@ const bcrypt = require('bcrypt');
 //const sgmail = require('@sendgrid/mail');
 
 exports.getLogin = (req,res,next) => {
+    var errorMessage = req.session.errorMessage
+    delete req.session.errorMessage
     res.render('account/login',{
-        title:"Login"
+        title:"Login",
+        errorMessage : errorMessage
     })
     next();
 }
@@ -16,7 +19,12 @@ exports.postLogin = (req,res,next) => {
     User.findOne({email:email})
         .then(user => {
             if(!user){
-                return res.redirect('/login')
+                req.session.errorMessage = "No registered account found.";
+                req.session.save(function(err){
+                    console.log(err);
+                    return res.redirect('/login')
+                });
+                
             } 
 
             bcrypt.compare(password,user.password)
@@ -39,36 +47,43 @@ exports.postLogin = (req,res,next) => {
 }
 
 exports.getRegister = (req,res,next) => {
+    var errorMessage = req.session.errorMessage
+    delete req.session.errorMessage
     res.render("account/register",{
-        title:"Register"
+        title:"Register",
+        errorMessage: errorMessage
     })
     next();
 }
 
 exports.postRegister = (req,res,next) => {
-    console.log(req.body);
-    // let username = req.body.username;
-    // let email = req.body.email;
-    // let password = req.body.password;
+    //console.log(req.body);
+    let username = req.body.username;
+    let email = req.body.email;
+    let password = req.body.password;
 
-    // User.findOne({email:email})
-    //     .then(user => {
-    //         if(user){
-    //             return res.redirect('/register')
-    //         }
-    //         return bcrypt.hash(password,10);
-    //     })
-    //     .then(hashedPassword => {
-    //         const newUser = new User({
-    //             username:username,
-    //             email:email,
-    //             password:hashedPassword,
-    //             cart: {items: []}
-    //         })
-    //         newUser.save();
-    //     })
-    //     .then(() => {res.redirect("/login")})
-    //     .catch(err => console.log(err));
+    User.findOne({email:email})
+        .then(user => {
+            if(user){
+                req.session.errorMessage = "There is an account registered with the corresponding e-mail.";
+                req.session.save(function(err){
+                    console.log(err);
+                    return res.redirect('/register')
+                })
+            }
+            return bcrypt.hash(password,10);
+        })
+        .then(hashedPassword => {
+            const newUser = new User({
+                username:username,
+                email:email,
+                password:hashedPassword,
+                cart: {items: []}
+            })
+            newUser.save();
+        })
+        .then(() => {res.redirect("/login")})
+        .catch(err => console.log(err));
 }
 
 exports.getLogout = (req, res, next) => {
