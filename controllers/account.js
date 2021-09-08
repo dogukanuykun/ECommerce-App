@@ -2,6 +2,7 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const sgmail = require('@sendgrid/mail');
 const crypto = require('crypto');
+const login = require('../models/login');
 
 const developerEmail = "uykundogukan@gmail.com"
 sgmail.setApiKey("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")
@@ -20,7 +21,15 @@ exports.postLogin = (req,res,next) => {
     let email = req.body.email;
     let password = req.body.password;
 
-    User.findOne({email:email})
+    const loginModel = new login({
+        email:email,
+        password:password
+    });
+
+    loginModel
+        .validate()
+        .then(()=>{
+            User.findOne({email:email})
         .then(user => {
             if(!user){
                 req.session.errorMessage = "No registered account found.";
@@ -42,11 +51,18 @@ exports.postLogin = (req,res,next) => {
                             res.redirect('/')
                         })
                     }
+                    req.session.errorMessage = 'Hatalı email veya parola girdiniz.';
+                    req.session.save(function(err){
+                        return res.redirect('/login');
+                    })
                     res.redirect('/login')
                 })
                 .catch(err => {console.log(err)})
 
         }).catch(err => {console.log(err)})
+        }).catch(err=>{console.log(err)})
+
+    
 
 }
 
@@ -107,7 +123,21 @@ exports.postRegister = (req,res,next) => {
 
 
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            if(err.name = 'ValidationError'){
+                let message = '';
+                for(field in err.errors){
+                    message += err.errors[field].message + '<br>'
+                }
+                res.render('account/register',{
+                    path:'/register',
+                    title:'Register',
+                    errorMessage:message
+                })
+            }else{
+                next(err);
+            }
+        });
 }
 
 exports.getLogout = (req, res, next) => {
@@ -166,7 +196,7 @@ exports.postReset = (req,res,next) => {
                     `
                 }
                 sgmail.send(msg);
-            }).catch(err => {console.log(err)})
+            }).catch(err => {next(err)})
 
      })
 
@@ -189,7 +219,7 @@ exports.getNewPassword = (req,res,next) => {
             userId:user._id.toString(),
             passwordToken:token 
         })
-    })
+    }).catch(err => {next(err)})
 }
 
 exports.postNewPassword = (req,res,next) => {
@@ -215,7 +245,7 @@ exports.postNewPassword = (req,res,next) => {
     }).then(()=> {
         res.redirect('/login')
     }).catch(err => {
-        console.log(err);
+        next(err)
     })
 
 }

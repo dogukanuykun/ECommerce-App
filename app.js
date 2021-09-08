@@ -63,6 +63,10 @@ app.use(csurf());
 app.use(shopRouter);
 app.use(accountRouter);
 
+app.use((error,req,res,next)=>{
+  res.status(500).render('error/500',{title:'Error'})
+})
+
 mongoose.connect(connectionString).then(() => {
   console.log("connected to mongodb");
   app.listen(3000);
