@@ -3,15 +3,17 @@ const router = express.Router();
 const shopController = require('../controllers/shop');
 
 const isAuthenticated = require('../middleware/authentication');
-const csrf = require('../middleware/csrf');
+const locals = require('../middleware/locals');
 
-router.get("/",csrf,isAuthenticated, shopController.getIndex);
+router.get("/",locals, shopController.getIndex);
 
-router.get("/products",csrf,isAuthenticated, shopController.getProducts)
+router.get("/products",locals, shopController.getProducts)
 
-router.get("/products/:productid",csrf,isAuthenticated, shopController.getProduct)
+router.get("/products/:productid",locals, shopController.getProduct)
 
-router.get("/categories/:categoryname",csrf,isAuthenticated, shopController.getByCategory)
+router.get("/categories/:categoryname",locals, shopController.getByCategory)
+
+
 
 
 module.exports = router
