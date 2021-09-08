@@ -42,21 +42,21 @@ app.use(
 app.use(express.static(path.join(__dirname, "public")));
 
 
-app.use((req, res, next) => {
-  if (!req.session.user) {
-    next();
-  }
+// app.use((req, res, next) => {
+//   if (!req.session.user) {
+//     next();
+//   }
 
-  User.findById(req.session.user._id)
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+//   User.findById(req.session.user._id)
+//     .then((user) => {
+//       req.user = user;
+//       next();
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
     
-});
+// });
 
 app.use(csurf());
 

@@ -2,12 +2,19 @@ body{
     background-color: #F8F0DF;
 }
 
-footer{
+#footer{
     background-color: #F8F0DF;
-    padding: 2%;
+    padding: 1% ;
     text-align: center;
-    background-color: #fff;
-    margin-top: 16rem;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 8rem;
+
+}
+
+.login-register {
+    margin: 6rem auto;
 }
 
 .pt-100 {
@@ -27,7 +34,4 @@ footer{
     transform: scale(1.2);  
 }
 
-.register-form{
-    padding: 5rem
-}
 

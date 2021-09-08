@@ -2,26 +2,31 @@ extends ../layouts/main-layout.pug
 
 block content 
 
-    div
-        h2 Register
-        hr
+    .login-register
 
-    form.register-form(action="/register" method="POST")
-        input(type="hidden" name="_csrf" value=`${csrfToken}`)
-        .form-group 
-            label(for="username") Username 
-            input.form-control(type="text" placeholder="Enter Username")
+        div
+            h2 Register
+            hr
 
-        .form-group
-            label(for="email") Email Address
-            input.form-control(type="email" aria-describedby="emailHelp" placeholder="Enter Email")
-            small.form-text.text-muted(id="emailHelp") We'll never share your email with anyone else
-        
-        .form-group
-            label(for="password") Password
-            input.form-control(type="password" placeholder="Password")
+        if errorMessage
+            div.alert.alert-danger.col-sm-7 #{errorMessage}
 
-        .form-group.form-check
-            input.form-check-input(type="checkbox")
-            label.form-check-label(for="checkbox") Check me out
-        button.btn.btn-primary(type="submit") Register
+        form(action="/register" method="POST")
+            input(type="hidden" name="_csrf" value=`${csrfToken}`)
+            .form-group 
+                label(for="username") Username 
+                input.form-control(type="text" placeholder="Enter Username")
+
+            .form-group
+                label(for="email") Email Address
+                input.form-control(type="email" aria-describedby="emailHelp" placeholder="Enter Email")
+                small.form-text.text-muted(id="emailHelp") We'll never share your email with anyone else
+            
+            .form-group
+                label(for="password") Password
+                input.form-control(type="password" placeholder="Password")
+
+            .form-group.form-check
+                input.form-check-input(type="checkbox")
+                label.form-check-label(for="checkbox") Check me out
+            button.btn.btn-primary(type="submit") Register
