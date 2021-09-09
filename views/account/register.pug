@@ -15,18 +15,15 @@ block content
             input(type="hidden" name="_csrf" value=`${csrfToken}`)
             .form-group 
                 label(for="username") Username 
-                input.form-control(type="text" placeholder="Enter Username")
+                input.form-control(type="text" name="username" placeholder="Username")
 
             .form-group
                 label(for="email") Email Address
-                input.form-control(type="email" aria-describedby="emailHelp" placeholder="Enter Email")
+                input.form-control(type="email" name="email" placeholder="Email")
                 small.form-text.text-muted(id="emailHelp") We'll never share your email with anyone else
             
             .form-group
                 label(for="password") Password
-                input.form-control(type="password" placeholder="Password")
-
-            .form-group.form-check
-                input.form-check-input(type="checkbox")
-                label.form-check-label(for="checkbox") Check me out
+                input.form-control(type="password" name="password" placeholder="Password")
+            hr
             button.btn.btn-primary(type="submit") Register

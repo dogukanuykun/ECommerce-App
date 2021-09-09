@@ -27,13 +27,6 @@ exports.getProduct = (req, res, next) => {
   });
 };
 
-exports.getProducts = (req,res,next) => {
-
-  res.render("shop/products",{
-    products:products
-  })
-}
-
 exports.getByCategory = (req,res,next) => {
   let selectedCategory = req.params.categoryname
   //console.log(selectedCategory)
@@ -65,14 +58,17 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
 
   const productId = req.body.productId;
-  Product.findById(productId)
-      .then(product => {
-          return req.user.addToCart(product);
-      })
-      .then(() => {
-          res.redirect('/cart');
-      })
-      .catch(err => next(err));
+
+  
+
+  // Product.findById(productId)
+  //     .then(product => {
+  //         return req.user.addToCart(product);
+  //     })
+  //     .then(() => {
+  //         res.redirect('/cart');
+  //     })
+  //     .catch(err => next(err));
 }
 
 exports.postCartItemDelete = (req, res, next) => {

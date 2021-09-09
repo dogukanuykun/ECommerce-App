@@ -26,56 +26,58 @@ exports.postLogin = (req,res,next) => {
         password:password
     });
 
+    console.log(loginModel);
+
     loginModel
         .validate()
-        .then(()=>{
-            User.findOne({email:email})
-        .then(user => {
-            if(!user){
-                req.session.errorMessage = "No registered account found.";
-                req.session.save(function(err){
-                    //console.log(err);
-                    return res.redirect('/login')
-                });
-                
-            } 
+            .then(()=>{
+                User.findOne({email:email})
+                .then(user => {
+                    if(!user){
+                        req.session.errorMessage = "No registered account found.";
+                        req.session.save(function(err){
+                            //console.log(err);
+                            return res.redirect('/login')
+                        });
+                        
+                    } 
 
-            bcrypt.compare(password,user.password)
-                .then(isEqual => {
-                    if(isEqual){
-                        req.session.user = user;
-                        req.session.isAuthenticated = true;
-                        return req.session.save(function(err){
-                            var url = req.session.redirectTo || "/";
-                            delete req.session.redirectTo;
-                            return res.redirect(url)
+                    bcrypt.compare(password,user.password)
+                    .then(isEqual => {
+                        if(isEqual){    
+                            req.session.user = user;
+                            req.session.isAuthenticated = true;
+                            return req.session.save(function(err){
+                                var url = req.session.redirectTo || "/";
+                                delete req.session.redirectTo;
+                                return res.redirect(url)
+                            })
+                        }
+                        req.session.errorMessage = 'Hatalı email veya parola girdiniz.';
+                        req.session.save(function(err){
+                            return res.redirect('/login');
                         })
-                    }
-                    req.session.errorMessage = 'Hatalı email veya parola girdiniz.';
-                    req.session.save(function(err){
-                        return res.redirect('/login');
-                    })
 
-                })
+                    })
                 .catch(err => {console.log(err)})
 
-        }).catch(err => {console.log(err)})
-        }).catch(err=>{
-            if(err.name ='ValidationError'){
-                let message = '';
-                for(field in err.erros){
-                    message += err.errors[field].message + '<br>';
+                }).catch(err => {console.log(err)})
+            }).catch(err=>{
+                if(err.name ='ValidationError'){
+                    let message = '';
+                    for(field in err.erros){
+                        message += err.errors[field].message + '<br>';
 
+                    }
+                    res.render('account/login',{
+                        path:'login',
+                        title:'Login',
+                        errorMessage:message
+                    })
+                }else{
+                    next(err);
                 }
-                res.render('account/login',{
-                    path:'login',
-                    title:'Login',
-                    errorMessage:message
-                })
-            }else{
-                next(err);
-            }
-        })
+            })
 
     
 
