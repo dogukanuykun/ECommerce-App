@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const app = express();
 const path = require("path");
@@ -11,7 +12,7 @@ const User = require("./models/user");
 const mongoDbStore = require("connect-mongodb-session")(session);
 const csurf = require("csurf");
 
-const connectionString = "mongodb://localhost:27017/ecommerceDB";
+const connectionString = process.env.CONNECTION_STRING;
 
 app.set("views", "./views");
 app.set("view engine", "pug");

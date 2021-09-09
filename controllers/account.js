@@ -4,8 +4,8 @@ const sgmail = require('@sendgrid/mail');
 const crypto = require('crypto');
 const login = require('../models/login');
 
-const developerEmail = "uykundogukan@gmail.com"
-sgmail.setApiKey("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")
+const developerEmail = process.env.DEVELOPER_EMAIL;
+sgmail.setApiKey(process.env.MAIL_API);
 
 exports.getLogin = (req,res,next) => {
     var errorMessage = req.session.errorMessage
