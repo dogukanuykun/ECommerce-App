@@ -2,14 +2,14 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const shopRouter = require("./routes/shop");
 const accountRouter = require("./routes/account");
 const session = require("express-session");
 const User = require("./models/user");
 const mongoDbStore = require("connect-mongodb-session")(session);
-const csurf = require('csurf');
+const csurf = require("csurf");
 
 const connectionString = "mongodb://localhost:27017/ecommerceDB";
 
@@ -37,10 +37,7 @@ app.use(
   })
 );
 
-
-
 app.use(express.static(path.join(__dirname, "public")));
-
 
 // app.use((req, res, next) => {
 //   if (!req.session.user) {
@@ -55,7 +52,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //     .catch((err) => {
 //       console.log(err);
 //     });
-    
+
 // });
 
 app.use(csurf());
@@ -63,9 +60,9 @@ app.use(csurf());
 app.use(shopRouter);
 app.use(accountRouter);
 
-app.use((error,req,res,next)=>{
-  res.status(500).render('error/500',{title:'Error'})
-})
+app.use((error, req, res, next) => {
+  res.status(500).render("error/500", { title: "Error" });
+});
 
 mongoose.connect(connectionString).then(() => {
   console.log("connected to mongodb");

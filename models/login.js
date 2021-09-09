@@ -4,7 +4,6 @@ const {isEmail} = require('validator');
 const loginSchema = mongoose.Schema({
     email:{
         type:String,
-        required:[true,"Email girmelisiniz."],
         validate:[isEmail,"Hatalı Email"]
     },
     password: {
