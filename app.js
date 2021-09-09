@@ -40,30 +40,30 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.use((req, res, next) => {
-//   if (!req.session.user) {
-//     next();
-//   }
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
 
-//   User.findById(req.session.user._id)
-//     .then((user) => {
-//       req.user = user;
-//       next();
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
+  User.findById(req.session.user._id)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
-// });
+});
 
 app.use(csurf());
 
 app.use(shopRouter);
 app.use(accountRouter);
 
-app.use((error, req, res, next) => {
-  res.status(500).render("error/500", { title: "Error" });
-});
+// app.use((error, req, res, next) => {
+//   res.status(500).render("error/500", { title: "Error" });
+// });
 
 mongoose.connect(connectionString).then(() => {
   console.log("connected to mongodb");

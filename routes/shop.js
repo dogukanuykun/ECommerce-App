@@ -11,9 +11,9 @@ router.get("/products/:productid",locals, shopController.getProduct)
 
 router.get("/categories/:categoryname",locals, shopController.getByCategory)
 
-router.get('/cart', isAuthenticated, locals, shopController.getCart);
+router.get('/cart', isAuthenticated, shopController.getCart);
 
-router.post('/cart', locals, isAuthenticated, shopController.postCart);
+router.post('/cart', isAuthenticated, shopController.postCart);
 
 router.post('/delete-cartitem', locals, isAuthenticated, shopController.postCartItemDelete);
 

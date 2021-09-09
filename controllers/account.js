@@ -26,7 +26,7 @@ exports.postLogin = (req,res,next) => {
         password:password
     });
 
-    console.log(loginModel);
+    //console.log(loginModel);
 
     loginModel
         .validate()

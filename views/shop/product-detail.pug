@@ -22,7 +22,11 @@ block content
             
             .mb-3
                 h4.text-primary.mb-3 #{product.price} €     
-                button(type="submit").btn.btn-primary.btn-lg Add to Cart
+                form(action='/cart' method='POST')
+                    input(type="hidden" name="_csrf" value=`${csrfToken}`)
+                    input(type='hidden' name='productId' value=`${product.id}`)
+                    button(type='submit').btn.btn-primary.btn-lg Add to Cart
+                
     
     .row 
         .col-md-12 
@@ -37,5 +41,5 @@ block content
         if(otherProducts.length > 0)
             each product in otherProducts 
                 +createProduct(product)
-            
-            
+                
+                

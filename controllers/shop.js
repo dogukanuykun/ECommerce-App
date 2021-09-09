@@ -1,5 +1,7 @@
 const productService = require('../services/productService');
 const categoryService = require('../services/categoryService');
+const Order = require('../models/order');
+const Product = require('../models/product');
 
 let products;
 let categories;
@@ -41,43 +43,44 @@ exports.getByCategory = (req,res,next) => {
 }
 
 exports.getCart = (req, res, next) => {
+
   req.user
-      .populate('cart.items.productId')
-      .execPopulate()
-      .then(user => {
-          res.render('shop/cart', {
-              title: 'Cart',
-              path: '/cart',
-              products: user.cart.items
-          });
-      }).catch(err => {
-          next(err);
+  .populate('cart.items.productId')
+  .execPopulate()
+  .then(user => {
+      res.render('shop/cart', {
+          title: 'Cart',
+          path: '/cart',
+          products: user.cart.items
       });
+  }).catch(err => {
+      next(err);
+  });
+
 }
 
 exports.postCart = (req, res, next) => {
 
   const productId = req.body.productId;
+  Product.findById(productId)
+      .then(product => {
+          return req.user.addToCart(product);
+      })
+      .then(() => {
+          res.redirect('/cart');
+      })
+      .catch(err => next(err));
 
-  
-
-  // Product.findById(productId)
-  //     .then(product => {
-  //         return req.user.addToCart(product);
-  //     })
-  //     .then(() => {
-  //         res.redirect('/cart');
-  //     })
-  //     .catch(err => next(err));
 }
 
 exports.postCartItemDelete = (req, res, next) => {
+
   const productid = req.body.productid;
-  req.user
-      .deleteCartItem(productid)
-      .then(() => {
-          res.redirect('/cart');
-      });
+    req.user
+        .deleteCartItem(productid)
+        .then(() => {
+            res.redirect('/cart');
+        });
 }
 
 exports.getOrders = (req, res, next) => {
