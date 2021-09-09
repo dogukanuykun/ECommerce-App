@@ -1,10 +1,7 @@
 nav.navbar.navbar-expand-lg.navbar-dark.bg-primary.fixed-top
     .container 
         a(href="/").navbar-brand Shopping
-        ul.navbar-nav.mr-auto
-            li.nav-item
-                a(href="/products", class=(path === '/products'?'nav-link active':'nav-link')) Products  
-
+        ul.navbar-nav.mr-auto 
             if isAuthenticated
 
                 li.nav-item

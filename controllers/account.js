@@ -34,7 +34,7 @@ exports.postLogin = (req,res,next) => {
             if(!user){
                 req.session.errorMessage = "No registered account found.";
                 req.session.save(function(err){
-                    console.log(err);
+                    //console.log(err);
                     return res.redirect('/login')
                 });
                 
@@ -48,19 +48,34 @@ exports.postLogin = (req,res,next) => {
                         return req.session.save(function(err){
                             var url = req.session.redirectTo || "/";
                             delete req.session.redirectTo;
-                            res.redirect('/')
+                            return res.redirect(url)
                         })
                     }
                     req.session.errorMessage = 'Hatalı email veya parola girdiniz.';
                     req.session.save(function(err){
                         return res.redirect('/login');
                     })
-                    res.redirect('/login')
+
                 })
                 .catch(err => {console.log(err)})
 
         }).catch(err => {console.log(err)})
-        }).catch(err=>{console.log(err)})
+        }).catch(err=>{
+            if(err.name ='ValidationError'){
+                let message = '';
+                for(field in err.erros){
+                    message += err.errors[field].message + '<br>';
+
+                }
+                res.render('account/login',{
+                    path:'login',
+                    title:'Login',
+                    errorMessage:message
+                })
+            }else{
+                next(err);
+            }
+        })
 
     
 
@@ -100,7 +115,7 @@ exports.postRegister = (req,res,next) => {
                 password:hashedPassword,
                 cart: {items: []}
             })
-            newUser.save();
+            return newUser.save();
         })
         .then(() => {
 
@@ -111,16 +126,9 @@ exports.postRegister = (req,res,next) => {
                 from: developerEmail, // Change to your verified sender
                 subject: 'Registration',
                 html: '<strong>Registration is successful!</strong>',
-              }
-              sgMail
-                .send(msg)
-                .then(() => {
-                  console.log('Email sent')
-                })
-                .catch((error) => {
-                  console.error(error)
-                })
+            };
 
+            sgMail.send(msg);
 
         })
         .catch(err => {
