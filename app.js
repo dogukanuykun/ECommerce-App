@@ -11,7 +11,7 @@ const session = require("express-session");
 const User = require("./models/user");
 const mongoDbStore = require("connect-mongodb-session")(session);
 const csurf = require("csurf");
-
+const errorController = require('./controllers/errors');
 const connectionString = process.env.CONNECTION_STRING;
 
 app.set("views", "./views");
@@ -61,9 +61,12 @@ app.use(csurf());
 app.use(shopRouter);
 app.use(accountRouter);
 
-// app.use((error, req, res, next) => {
-//   res.status(500).render("error/500", { title: "Error" });
-// });
+app.use('/500', errorController.get500Page);
+app.use(errorController.get404Page);
+app.use((error, req, res, next) => {
+  console.log(error);
+  res.status(500).render('error/500', { title: 'Error' });
+});
 
 mongoose.connect(connectionString).then(() => {
   console.log("connected to mongodb");
