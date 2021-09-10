@@ -21,6 +21,7 @@ const userSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
+    googleId: String,
     resetToken:String,
     resetTokenExpiration:Date,
     cart : {
@@ -40,6 +41,7 @@ const userSchema = mongoose.Schema({
     }
 
 })
+
 
 userSchema.methods.addToCart = function (product) {
     const index = this.cart.items.findIndex(cp => {
