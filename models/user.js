@@ -81,15 +81,15 @@ userSchema.methods.getCart = function () {
                 $in: ids
             }
         })
-        .select('name price imageUrl')
+        .select('title price image')
         .then(products => {
             return products.map(p => {
                 return {
                     name: p.name,
                     price: p.price,
-                    imageUrl: p.imageUrl,
+                    image: p.image,
                     quantity: this.cart.items.find(i => {
-                        return i.productId.toString() === p._id.toString()
+                        return i.productId.toString() === p.id.toString()
                     }).quantity
                 }
             });

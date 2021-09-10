@@ -20,7 +20,7 @@ block content
                 each product in products
                     tr
                         td
-                            img(src=`/img/${product.productId.imageUrl}` width='80')
+                            img(src=`${product.productId.image}` width='80')
                         td #{product.productId.name}
                         td #{product.productId.price} TL
                         td #{product.quantity}

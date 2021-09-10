@@ -1,11 +1,12 @@
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
+const connectionString = process.env.CONNECTION_STRING;
 
 let _db;
 
 const mongoConnect = (callback) => {
 
-    MongoClient.connect('mongodb://localhost/ecommerceDB')
+    MongoClient.connect(connectionString)
         .then(client =>{
             console.log("connected");
             _db = client.db;
