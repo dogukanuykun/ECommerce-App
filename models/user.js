@@ -1,21 +1,19 @@
 const mongoose = require('mongoose');
 const {isEmail} = require('validator');
+const passportLocalMongoose = require('passport-local-mongoose');
+const findOrCreate = require('mongoose-findorcreate');
 
 const userSchema = mongoose.Schema({
 
-    _id: mongoose.Schema.Types.ObjectId,
-
     username : {
-        type: String,
-        required: true
+        type: String
     },
     email: {
         type:String,
         validate: [isEmail,'Invalid Email']
     },
     password:{
-        type:String,
-        required:true
+        type:String
     },
     isAdmin: {
         type: Boolean,
@@ -41,6 +39,9 @@ const userSchema = mongoose.Schema({
     }
 
 })
+
+userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(findOrCreate);
 
 
 userSchema.methods.addToCart = function (product) {

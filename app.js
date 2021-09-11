@@ -13,7 +13,8 @@ const mongoDbStore = require("connect-mongodb-session")(session);
 const csurf = require("csurf");
 const errorController = require('./controllers/errors');
 const passport = require('passport')
-const GoogleStrategy = require('passport').Strategy;
+const passportLocal = require('passport-local');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 
 const connectionString = process.env.CONNECTION_STRING;
@@ -29,7 +30,7 @@ var store = new mongoDbStore({
 });
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(
@@ -47,13 +48,18 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+passport.use(User.createStrategy());
+
 passport.serializeUser(function(user,done){
-  done(null,user)
+  done(null, user.id);
 })
 
 passport.deserializeUser(function(id,done){
 
-  done(err,user)
+  User.findById(id, function(err, user) {
+    done(err, user);
+    
+  });
 
 })
 
@@ -61,11 +67,13 @@ passport.use('google',new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.callbackURL,
-  passReqToCallback: true
+  userProfileURL:process.env.userProfileURL
 },
 function(accessToken, refreshToken, profile, cb) {
   
-    return done(null, profile);
+  User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    return cb(err, user);
+  }); 
 
 }
 ));
@@ -78,6 +86,7 @@ app.get("/auth/google/callback",
   passport.authenticate('google', { failureRedirect: "/login", session:true}),
   function(req, res) {
     // Successful authentication, redirect to home.
+    req.session.isAuthenticated = true;
     res.redirect("/");
   });
 
@@ -101,9 +110,9 @@ app.use(csurf());
 
 app.use(shopRouter);
 app.use(accountRouter);
-
-app.use('/500', errorController.get500Page);
 app.use(errorController.get404Page);
+app.use('/500', errorController.get500Page);
+
 app.use((error, req, res, next) => {
   console.log(error);
   res.status(500).render('error/500', { title: 'Error' });
