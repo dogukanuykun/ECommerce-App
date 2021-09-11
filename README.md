@@ -11,8 +11,8 @@ Features:<br>
 -Add to Cart<br>
 -Remove from Cart<br>
 -Create Order<br>
--Admin Panel<br>
-
+-Admin Panel
+<br>
 Screenshots:<br>
 <img src="screenshots/ss-1.png"/><hr>
 <img src="screenshots/ss-2.png"/><hr>
