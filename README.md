@@ -12,3 +12,10 @@ Features:<br>
 -Remove from Cart<br>
 -Create Order<br>
 -Admin Panel<br>
+
+Screenshots:<br>
+<img src="screenshots/ss-1.png"/><hr>
+<img src="screenshots/ss-2.png"/><hr>
+<img src="screenshots/ss-3.png"/><hr>
+<img src="screenshots/ss-4.png"/><hr>
+<img src="screenshots/ss-5.png"/><hr>
