@@ -1,6 +1,6 @@
 # E-Commerce-App
 
-A clone application that hosts the classic transactions that an e-commerce site can do.
+A clone application with MVC architecture, which contains the classical transactions that an e-commerce site can do.
 <hr>
 Features:<br>
 -Login/Register<br>
