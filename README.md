@@ -4,7 +4,7 @@ A clone application with MVC architecture, which contains the classical transact
 <hr>
 Features:<br>
 -Login/Register<br>
--Login/Register with Google<br>
+-Login/Register with Google OAuth 2.0<br>
 -Reset Password<br>
 -List products/categories<br>
 -Product Details
